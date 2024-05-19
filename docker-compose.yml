@@ -1,0 +1,6 @@
+﻿services:
+  reviewapp:
+    image: reviewapp
+    build:
+      context: .
+      dockerfile: ReviewApp/Dockerfile
