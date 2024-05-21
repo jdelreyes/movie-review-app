@@ -1,6 +1,31 @@
-﻿services:
-  reviewapp:
-    image: reviewapp
+﻿version: '3.8'
+
+services:
+  review-app:
+    image: review-app:1.0
+    container_name: review-app
     build:
       context: .
       dockerfile: ReviewApp/Dockerfile
+    ports:
+      - "80:80"
+    depends_on:
+      - sql-server
+    networks:
+      - review-app-network
+  
+  sql-server:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: sql-server
+    environment:
+      SA_PASSWORD: TD0Bf4krC5VWGt4vyyB$
+      ACCEPT_EULA: Y
+    ports:
+      - "1433:1433"
+    networks:
+      - review-app-network
+
+networks:
+  review-app-network:
+    driver: bridge
+    
