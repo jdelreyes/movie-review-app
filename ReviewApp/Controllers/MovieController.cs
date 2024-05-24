@@ -1,4 +1,5 @@
 using System.Net;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using ReviewApp.Dto;
 using ReviewApp.Interfaces;
@@ -11,17 +12,22 @@ namespace ReviewApp.Controllers;
 public class MovieController : ControllerBase
 {
     private readonly IMovieRepository _movieRepository;
+    private readonly IMapper _mapper;
 
-    public MovieController(IMovieRepository movieRepository)
+    public MovieController(IMovieRepository movieRepository, IMapper mapper)
     {
         _movieRepository = movieRepository;
+        _mapper = mapper;
     }
 
     [HttpGet]
-    [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(IEnumerable<Movie>))]
+    [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(IEnumerable<MovieDto>))]
     public IActionResult GetMovies()
     {
-        return Ok(_movieRepository.GetMovies());
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
+
+        return Ok(_mapper.Map<List<MovieDto>>(_movieRepository.GetMovies()));
     }
 
     [HttpGet("{id}")]
@@ -53,9 +59,9 @@ public class MovieController : ControllerBase
 
     [HttpPost] // todo: finish
     [ProducesResponseType((int)HttpStatusCode.Created, Type = typeof(MovieDto))]
-    public IActionResult CreateMovie([FromBody] Movie movie)
+    public IActionResult CreateMovie([FromBody] CreateMovieDto createMovieDto)
     {
-        Movie createdMovie = _movieRepository.CreateMovie(movie);
+        Movie createdMovie = _movieRepository.CreateMovie(createMovieDto);
         return Created("api/movies/" + createdMovie.Id, createdMovie);
     }
 

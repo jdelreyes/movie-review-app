@@ -1,5 +1,7 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using ReviewApp.Data;
+using ReviewApp.Dto;
 using ReviewApp.Interfaces;
 using ReviewApp.Models;
 
@@ -8,10 +10,12 @@ namespace ReviewApp.Repositories;
 public class MovieRepository : IMovieRepository
 {
     private DataContext _context;
+    private readonly IMapper _mapper;
 
-    public MovieRepository(DataContext context)
+    public MovieRepository(DataContext context, IMapper mapper)
     {
         _context = context;
+        _mapper = mapper;
     }
 
     public IEnumerable<Movie> GetMovies()
@@ -29,9 +33,21 @@ public class MovieRepository : IMovieRepository
         return _context.Movies.Where(m => m.Title == title).FirstOrDefault();
     }
 
-    public Movie CreateMovie(Movie movie)
+    public Movie CreateMovie(CreateMovieDto createMovieDto)
     {
-        return _context.Movies.Add(movie).Entity;
+        // todo: finish the method 
+        Movie movie = new Movie()
+        {
+            Desription = createMovieDto.Desription,
+            Director = createMovieDto.Director,
+            Genre = createMovieDto.Director,
+            Title = createMovieDto.Title
+        };
+
+        _context.Add(movie);
+        _context.SaveChanges();
+
+        return movie;
     }
 
     public bool MovieExists(int id)
