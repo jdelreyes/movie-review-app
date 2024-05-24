@@ -16,6 +16,7 @@ public class Program
         builder.Services.AddControllers();
         // auto wiring
         builder.Services.AddScoped<IMovieRepository, MovieRepository>();
+        builder.Services.AddScoped<IReviewerRepository, ReviewerRepository>();
         // auto mapper
         builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
