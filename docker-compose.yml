@@ -9,6 +9,7 @@ services:
       dockerfile: ReviewApp/Dockerfile
     ports:
       - "80:80"
+      - "443:443"
     depends_on:
       - sql-server
     networks:

@@ -19,12 +19,12 @@ public class ReviewerRepository : IReviewerRepository
 
     public IEnumerable<ReviewerDto> GetReviewers()
     {
-        return _mapper.Map<IEnumerable<Reviewer>, IEnumerable<ReviewerDto>>(_context.Reviewers.ToList());
+        return _mapper.Map<IEnumerable<ReviewerDto>>(_context.Reviewers.ToList());
     }
 
     public ReviewerDto GetReviewer(int id)
     {
-        return _mapper.Map<Reviewer, ReviewerDto>(_context.Reviewers.Where(reviewer => reviewer.Id == id)
+        return _mapper.Map<ReviewerDto>(_context.Reviewers.Where(reviewer => reviewer.Id == id)
             .FirstOrDefault());
     }
 
@@ -43,11 +43,22 @@ public class ReviewerRepository : IReviewerRepository
 
     public ReviewerDto UpdateReviewer(int id, UpdateReviewerDto updateReviewerDto)
     {
-        throw new NotImplementedException();
+        Reviewer reviewer = _context.Reviewers.Where(r => r.Id == id).FirstOrDefault();
+        Reviewer updatedReviewer =
+            _context.Update(_mapper.Map<Reviewer>(updateReviewerDto)).Entity;
+
+        _context.SaveChanges();
+
+        return _mapper.Map<Reviewer, ReviewerDto>(updatedReviewer);
     }
 
     public ReviewerDto DeleteReviewer(int id)
     {
-        throw new NotImplementedException();
+        Reviewer reviewer = _context.Reviewers.Where(r => r.Id == id).FirstOrDefault();
+        
+        _context.Reviewers.Remove(reviewer);
+        _context.SaveChanges();
+
+        return _mapper.Map<ReviewerDto>(reviewer);
     }
 }

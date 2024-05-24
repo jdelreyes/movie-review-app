@@ -5,10 +5,12 @@ namespace ReviewApp.Interfaces;
 
 public interface IMovieRepository
 {
-    IEnumerable<Movie> GetMovies();
-    Movie GetMovie(int id);
-    Movie GetMovie(string title);
-    Movie CreateMovie(CreateMovieDto createMovieDto);
+    IEnumerable<MovieDto> GetMovies();
+    MovieDetailsDto GetMovie(int id);
+    MovieDetailsDto GetMovie(string title);
+    MovieDetailsDto CreateMovie(CreateMovieDto createMovieDto);
+    MovieDetailsDto UpdateMovie(int id, UpdateMovieDto updateMovieDto);
+    MovieDetailsDto DeleteMovie(int id);
     bool MovieExists(int id);
     string GetMovieDirector(int id);
 }

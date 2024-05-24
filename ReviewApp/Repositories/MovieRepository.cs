@@ -9,7 +9,7 @@ namespace ReviewApp.Repositories;
 
 public class MovieRepository : IMovieRepository
 {
-    private DataContext _context;
+    private readonly DataContext _context;
     private readonly IMapper _mapper;
 
     public MovieRepository(DataContext context, IMapper mapper)
@@ -18,36 +18,65 @@ public class MovieRepository : IMovieRepository
         _mapper = mapper;
     }
 
-    public IEnumerable<Movie> GetMovies()
+    public IEnumerable<MovieDto> GetMovies()
     {
-        return _context.Movies.ToList();
+        return _mapper.Map<IEnumerable<MovieDto>>(_context.Movies.ToList());
     }
 
-    public Movie GetMovie(int id)
+    public MovieDetailsDto GetMovie(int id)
     {
-        return _context.Movies.Where(m => m.Id == id).FirstOrDefault();
+        return _mapper.Map<MovieDetailsDto>(_context.Movies.Where(m => m.Id == id).FirstOrDefault());
     }
 
-    public Movie GetMovie(string title)
+    public MovieDetailsDto GetMovie(string title)
     {
-        return _context.Movies.Where(m => m.Title == title).FirstOrDefault();
+        return _mapper.Map<MovieDetailsDto>(_context.Movies.Where(m => m.Title == title).FirstOrDefault());
     }
 
-    public Movie CreateMovie(CreateMovieDto createMovieDto)
+    public MovieDetailsDto CreateMovie(CreateMovieDto createMovieDto)
     {
         // todo: finish the method 
         Movie movie = new Movie()
         {
-            Desription = createMovieDto.Desription,
+            Description = createMovieDto.Description,
             Director = createMovieDto.Director,
-            Genre = createMovieDto.Director,
+            Genre = createMovieDto.Genre,
             Title = createMovieDto.Title
         };
 
         _context.Add(movie);
         _context.SaveChanges();
 
-        return movie;
+        return _mapper.Map<MovieDetailsDto>(movie);
+    }
+
+    public MovieDetailsDto UpdateMovie(int id, UpdateMovieDto updateMovieDto)
+    {
+        Movie movie = _context.Movies.Where(m => m.Id == id).FirstOrDefault();
+
+        Movie updatedMovie = new Movie()
+        {
+            Id = movie.Id,
+            Description = updateMovieDto.Description,
+            Director = updateMovieDto.Director,
+            Genre = updateMovieDto.Genre,
+            Title = updateMovieDto.Title
+        };
+
+        _context.Add(updatedMovie);
+        _context.SaveChanges();
+
+        return _mapper.Map<MovieDetailsDto>(updatedMovie);
+    }
+
+    public MovieDetailsDto DeleteMovie(int id)
+    {
+        Movie movie = _context.Movies.Where(m => m.Id == id).FirstOrDefault();
+
+        _context.Remove(movie);
+        _context.SaveChanges();
+
+        return _mapper.Map<MovieDetailsDto>(movie);
     }
 
     public bool MovieExists(int id)

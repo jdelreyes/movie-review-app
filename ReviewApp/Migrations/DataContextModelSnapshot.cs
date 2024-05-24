@@ -46,7 +46,7 @@ namespace ReviewApp.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<string>("Desription")
+                    b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -120,7 +120,7 @@ namespace ReviewApp.Migrations
                         .IsRequired();
 
                     b.HasOne("ReviewApp.Models.Reviewer", "Reviewer")
-                        .WithMany("Reviews")
+                        .WithMany()
                         .HasForeignKey("ReviewerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -128,11 +128,6 @@ namespace ReviewApp.Migrations
                     b.Navigation("Movie");
 
                     b.Navigation("Reviewer");
-                });
-
-            modelBuilder.Entity("ReviewApp.Models.Reviewer", b =>
-                {
-                    b.Navigation("Reviews");
                 });
 #pragma warning restore 612, 618
         }

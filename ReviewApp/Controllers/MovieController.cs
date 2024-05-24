@@ -12,12 +12,10 @@ namespace ReviewApp.Controllers;
 public class MovieController : ControllerBase
 {
     private readonly IMovieRepository _movieRepository;
-    private readonly IMapper _mapper;
 
-    public MovieController(IMovieRepository movieRepository, IMapper mapper)
+    public MovieController(IMovieRepository movieRepository)
     {
         _movieRepository = movieRepository;
-        _mapper = mapper;
     }
 
     [HttpGet]
@@ -27,7 +25,7 @@ public class MovieController : ControllerBase
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
 
-        return Ok(_mapper.Map<List<MovieDto>>(_movieRepository.GetMovies()));
+        return Ok(_movieRepository.GetMovies());
     }
 
     [HttpGet("{id}")]
@@ -58,19 +56,26 @@ public class MovieController : ControllerBase
     }
 
     [HttpPost] // todo: finish
-    [ProducesResponseType((int)HttpStatusCode.Created, Type = typeof(MovieDto))]
+    [ProducesResponseType((int)HttpStatusCode.Created, Type = typeof(MovieDetailsDto))]
     public IActionResult CreateMovie([FromBody] CreateMovieDto createMovieDto)
     {
-        Movie createdMovie = _movieRepository.CreateMovie(createMovieDto);
+        MovieDetailsDto createdMovie = _movieRepository.CreateMovie(createMovieDto);
         return Created("api/movies/" + createdMovie.Id, createdMovie);
     }
 
-    [HttpPut]
-    [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(MovieDto))]
+    [HttpPut("{id}")]
+    [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(MovieDetailsDto))]
     public IActionResult UpdateMovie(int id, [FromBody] UpdateMovieDto updateMovieDto)
     {
-        throw new NotImplementedException();
+        MovieDetailsDto movieDetailsDto = _movieRepository.UpdateMovie(id, updateMovieDto);
+        return Ok(movieDetailsDto);
     }
-    
-    
+
+    [HttpDelete("{id}")]
+    [ProducesResponseType((int)HttpStatusCode.NoContent)]
+    public IActionResult DeleteMovie(int id)
+    {
+        _movieRepository.DeleteMovie(id);
+        return NoContent();
+    }
 }
