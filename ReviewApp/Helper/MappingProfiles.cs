@@ -1,6 +1,8 @@
 using AutoMapper;
 using ReviewApp.Dto;
+using ReviewApp.Dto.Review;
 using ReviewApp.Dto.Reviewer;
+using ReviewApp.Interfaces;
 using ReviewApp.Models;
 
 namespace ReviewApp.Helper;
@@ -16,5 +18,8 @@ public class MappingProfiles : Profile
         CreateMap<Reviewer, ReviewerDto>().ReverseMap();
         CreateMap<Reviewer, CreateReviewerDto>().ReverseMap();
         CreateMap<Reviewer, UpdateReviewerDto>().ReverseMap();
+        CreateMap<Review, ReviewDto>().ReverseMap();
+        CreateMap<Review, CreateReviewDto>().ReverseMap();
+        CreateMap<Review, UpdateReviewDto>().ReverseMap();
     }
 }
