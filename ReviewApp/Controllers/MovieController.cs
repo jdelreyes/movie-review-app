@@ -60,7 +60,7 @@ public class MovieController : ControllerBase
     public IActionResult CreateMovie([FromBody] CreateMovieDto createMovieDto)
     {
         MovieDetailsDto createdMovie = _movieRepository.CreateMovie(createMovieDto);
-        return Created("api/movies/" + createdMovie.Id, createdMovie);
+        return Created("/api/movies/" + createdMovie.Id, createdMovie);
     }
 
     [HttpPut("{id}")]

@@ -35,10 +35,10 @@ public class ReviewerController : ControllerBase
     public IActionResult CreateReviewer([FromBody] CreateReviewerDto createReviewerDto)
     {
         ReviewerDto reviewerDto = _reviewerRepository.CreateReviewer(createReviewerDto);
-        return Created("/api/reviewers" + reviewerDto.Id, reviewerDto);
+        return Created("/api/reviewers/" + reviewerDto.Id, reviewerDto);
     }
 
-    [HttpPut]
+    [HttpPut("{id}")]
     [ProducesResponseType((int)HttpStatusCode.OK)]
     public IActionResult UpdateReviewer(int id, [FromBody] UpdateReviewerDto updateReviewerDto)
     {
