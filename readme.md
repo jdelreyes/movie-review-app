@@ -3,7 +3,7 @@
 ## Overview
 
 A simple movie review app utilizing .NET Web APIs and a SQL Server.
-It features RESTful api and a clean, organized folders for separation of concerns.
+It features RESTful API and a clean, organized folders for separation of concerns.
 While practicing using the technology, I learned that .NET is very similar to Spring with minor differences of implementation.
 
 ## Installation
